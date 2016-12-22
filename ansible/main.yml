@@ -1,16 +1,54 @@
 ---
-- hosts: all
+- hosts: localhost
   become: yes
   gather_facts: yes
 
   roles:
-    - geerlingguy.nfs
-    - geerlingguy.packer-debian
+    - andres-rojas.antigen_zsh
+    - ANXS.postgresql
+    - chrome
+    - nodejs
+    - ansible-java8-oracle
+    - elasticsearch
+    - { role: rvm_io.ruby,
+        become: yes,
+        rvm1_rubies: ['ruby-2.3.1', 'jruby-9.1.5.0'],
+        rvm1_install_path: /usr/local/rvm,
+        rvm1_user: root,
+        rvm1_bundler_install: yes
+      }
 
   tasks:
+    - apt_repository:
+        repo: 'ppa:nginx/development'
+        update_cache: yes
     - apt: "name={{ item }} state=installed"
       with_items:
+        - apt-transport-https
+        - ca-certificates
         - git
         - wget
         - curl
         - vim
+        - zsh
+        - htop
+        - nginx
+
+    # - name: Install NFS server
+    #   apt: name="nfs-kernel-server"
+
+    # - name: Add NFS config
+    #   lineinfile: 
+    #     dest: /etc/exports
+    #     line: '/home/vagrant 172.16.3.1(rw,sync,no_root_squash,no_subtree_check)'
+    #     create: yes
+    #     state: present
+
+    # - name: Enable NFS server on boot
+    #   service: name=nfs-kernel-server state=started enabled=yes
+    
+    # - name: export fs
+    #   shell: exportfs -ar
+
+    # - name: show exports
+    #   shell: showmount -e

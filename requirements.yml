@@ -1,0 +1,2 @@
+- src: git+https://github.com/malk/ansible-java8-oracle.git
+- src: git+https://richtmat@bitbucket.org/finderbox/fb-jenkins-ci.git
