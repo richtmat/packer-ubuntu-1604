@@ -6,3 +6,57 @@
   - name: Set shell to zsh
     become: yes
     user: name=vagrant shell=/bin/zsh
+
+  - name: Make dev directory
+    file: path=/home/vagrant/development state=directory
+
+  - name: Make modules directory
+    file: path=/home/vagrant/development/angular-modules state=directory
+
+  - authorized_key:
+      user: vagrant
+      state: present
+      key: "{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
+
+  - name: Checkout finderbox webapp
+    git:
+      repo: git@github.com:identpro/finderbox.git
+      dest: /home/vagrant/development/finderbox
+      accept_hostkey: yes
+
+  - name: Checkout finderbox mobileapp
+    git:
+      repo: git@github.com:identpro/finderbox-mobileapp.git
+      dest: /home/vagrant/development/finderbox-mobileapp
+      accept_hostkey: yes
+
+  - name: Checkout finderbox landingpage
+    git:
+      repo: git@bitbucket.org:finderbox/fb-landing.git
+      dest: /home/vagrant/development/finderbox-landingpage
+      accept_hostkey: yes
+
+  - name: Checkout finderbox Provisioning
+    git:
+      repo: git@bitbucket.org:finderbox/fb-provisioning.git
+      dest: /home/vagrant/development/finderbox-provisioning
+      accept_hostkey: yes
+
+  - name: Checkout finderbox Docs
+    git:
+      repo: git@bitbucket.org:finderbox/fb-docs.git
+      dest: /home/vagrant/development/finderbox-documentation
+      accept_hostkey: yes
+
+  - name: Checkout finderbox translations
+    git:
+      repo: git@github.com:identpro/finderbox-translations.git
+      dest: /home/vagrant/development/angular-modules/finderbox-translations
+      accept_hostkey: yes
+
+  - name: Checkout finderbox api
+    git:
+      repo: git@github.com:identpro/finderbox-api.git
+      dest: /home/vagrant/development/angular-modules/finderbox-api
+      accept_hostkey: yes
+

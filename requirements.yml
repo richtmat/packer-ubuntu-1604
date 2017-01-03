@@ -1,2 +1,7 @@
 - src: git+https://github.com/malk/ansible-java8-oracle.git
 - src: git+https://richtmat@bitbucket.org/finderbox/fb-jenkins-ci.git
+- geerlingguy.packer-debian
+- geerlingguy.nfs
+- andres-rojas.antigen_zsh
+- ANXS.postgresql
+- rvm_io.ruby

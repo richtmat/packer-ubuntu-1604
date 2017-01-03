@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", inline: "echo Hello, World"
 
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/devbox.yml"
+      ansible.playbook = "ansible-after-vagrant/devbox.yml"
       ansible.host_key_checking = false
     end
   end

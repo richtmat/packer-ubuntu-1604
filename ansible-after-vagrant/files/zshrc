@@ -162,5 +162,27 @@ __git_files () {
  _wanted files expl 'local files' _files     
 }
 
+echo "creating finderbox aliases"
+alias fbw="cd /home/vagrant/development/finderbox/finderbox-web-client"
+alias fb="cd /home/vagrant/development/finderbox/finderbox"
+alias fbm="cd /home/vagrant/development/finderbox-mobileapp"
+alias fbam="cd /home/vagrant/development/angular-modules"
+alias fbp="cd /home/vagrant/development/finderbox-provisioning"
+alias fbd="cd /home/vagrant/development/finderbox-documentation"
+alias fbl="cd /home/vagrant/development/finderbox-landingpage"
+alias fbt="cd /home/vagrant/development/angular-modules/finderbox-translations"
+alias fba="cd /home/vagrant/development/angular-modules/finderbox-api"
+alias dev="cd /home/vagrant/development/"
+
+echo "created finderbox aliases"
+
+alias ll='ls -alF'
+
+if [ $SSH_AGENT_PID ]; then
+    if [[ $(ssh-add -l) != *id_?sa* ]]; then
+        ssh-add -t 2w  ## Haltbarkeit von 2w
+    fi
+fi
+
 alias vless="vim -u /usr/share/vim/vim74/macros/less.vim"
 cd /vagrant

@@ -19,6 +19,9 @@
       "type": "ansible-local",
       "playbook_file": "ansible/main.yml",
       "role_paths": [
+        "/etc/ansible/roles/andres-rojas.antigen_zsh",
+        "/etc/ansible/roles/ANXS.postgresql",
+        "/etc/ansible/roles/rvm_io.ruby",
         "/etc/ansible/roles/geerlingguy.packer-debian",
         "/etc/ansible/roles/geerlingguy.nfs",
         "/etc/ansible/roles/ansible-java8-oracle",
