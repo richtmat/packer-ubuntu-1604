@@ -1,4 +1,4 @@
-- src: git+https://github.com/malk/ansible-java8-oracle.git
+- williamyeh.oracle-java
 - src: git+https://richtmat@bitbucket.org/finderbox/fb-jenkins-ci.git
 - geerlingguy.packer-debian
 - geerlingguy.nfs

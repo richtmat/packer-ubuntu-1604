@@ -24,20 +24,19 @@ Vagrant.configure("2") do |config|
       v.customize ["modifyvm", :id, "--ioapic", "on"]
     end
 
-    config.vm.provision "fix-no-tty", type: "shell" do |s|
-      s.privileged = false
-      s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
-    end
+    # config.vm.provision "fix-no-tty", type: "shell" do |s|
+    #   s.privileged = false
+    #   s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+    # end
     
-    config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
-    config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+    # config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
+    # config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
     
-    config.vm.provision "shell", inline: "echo Hello, World"
+    # config.vm.provision "shell", inline: "echo Hello, Worldz"
 
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible-after-vagrant/devbox.yml"
-      ansible.host_key_checking = false
-    end
+    # config.vm.provision "ansible" do |ansible|
+    #   ansible.playbook = "ansible-after-vagrant/devbox.yml"
+    # end
   end
 
 end

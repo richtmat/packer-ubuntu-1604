@@ -3,21 +3,23 @@
   become: yes
   gather_facts: yes
   
+  vars:
+    java_set_javahome: false
 
   roles:
     - geerlingguy.packer-debian
     - andres-rojas.antigen_zsh
     - chrome
     - nodejs
-    - ansible-java8-oracle
+    - williamyeh.oracle-java
     - elasticsearch
-    # - { role: rvm_io.ruby,
-    #     become: yes,
-    #     rvm1_rubies: ['ruby-2.3.1', 'jruby-9.1.5.0'],
-    #     rvm1_install_path: /usr/local/rvm,
-    #     rvm1_user: root,
-    #     rvm1_bundler_install: yes
-    #   }
+    - { role: rvm_io.ruby,
+        become: yes,
+        rvm1_rubies: ['ruby-2.3.1', 'jruby-9.1.5.0'],
+        rvm1_install_path: /usr/local/rvm,
+        rvm1_user: root,
+        rvm1_bundler_install: yes
+      }
 
   tasks:
     - apt_repository:
