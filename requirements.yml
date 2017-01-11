@@ -1,7 +1,7 @@
 - williamyeh.oracle-java
-- src: git+https://richtmat@bitbucket.org/finderbox/fb-jenkins-ci.git
-- geerlingguy.packer-debian
-- geerlingguy.nfs
-- andres-rojas.antigen_zsh
+# - src: git+https://richtmat@bitbucket.org/finderbox/fb-jenkins-ci.git
+- src: geerlingguy.packer-debian
+- src: franklinkim.users-oh-my-zsh
+- cmprescott.chrome
+- geerlingguy.nodejs
 - ANXS.postgresql
-- rvm_io.ruby
