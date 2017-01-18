@@ -1,11 +1,11 @@
 ---
 - hosts: localhost
   tasks:
-  - name: Copy zshrc 
-    copy: src=files/zshrc dest=/home/vagrant/.zshrc
-  - name: Set shell to zsh
-    become: yes
-    user: name=vagrant shell=/bin/zsh
+  # - name: Copy zshrc 
+  #   copy: src=files/zshrc dest=/home/vagrant/.zshrc
+  # - name: Set shell to zsh
+  #   become: yes
+  #   user: name=vagrant shell=/bin/zsh
 
   - name: Make dev directory
     file: path=/home/vagrant/development state=directory

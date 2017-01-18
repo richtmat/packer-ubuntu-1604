@@ -1,0 +1,4 @@
+---
+- name: restart-elasticsearch
+  become: true
+  service: name=elasticsearch state=restarted

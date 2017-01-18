@@ -1,0 +1,21 @@
+---
+- name: add-group-maven
+  group: name={{maven_gr}} state=present
+
+- name: add-user-maven
+  user: name={{maven_un}} password={{ fb_maven_repo_user_pw | password_hash('sha512') }} group={{maven_gr}} shell=/bin/bash comment="Maven Repo"
+
+- name: allow-ssh-pass-for-maven
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    block: |
+      Match Group {{maven_gr}}
+        PasswordAuthentication yes
+  notify: restart-ssh
+
+- name: add-authorized-keys
+  authorized_key: user={{maven_un}} key="{{item}}"     
+  with_items:
+    - "{{ssh_pub_key_masteridentpro}}"
+    - "{{ssh_pub_key_andreasba}}"
+    - "{{ssh_pub_key_jenkinsciidentpro}}"

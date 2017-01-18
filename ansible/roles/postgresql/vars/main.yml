@@ -1,0 +1,7 @@
+---
+postgresql_version: 9.5
+postgresql_fb_db_list: [
+    finderbox_development,
+    finderbox_test,
+    finderbox_onpremise
+]

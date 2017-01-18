@@ -1,0 +1,35 @@
+---
+- name: install-postgresql | PostgreSQL in version {{postgresql_version}}
+  apt:
+    name: "{{ item }}"
+    # latest is allowed, because packages with specific version
+    # like elasticsearch will be marked to its specified version
+    state: latest
+    update_cache: yes
+    install_recommends: yes
+  with_items:
+    - postgresql-{{postgresql_version}}
+    - python-psycopg2 # requrement for postgresql module
+
+- name: start-postgresql-server
+  service: name=postgresql state=started enabled=yes
+
+# Create finderbox user, grant privilege to
+# create other databases and demote from super user status
+- name: create-fb-user
+  become_user: postgres
+  postgresql_user: name={{postgresql_fb_un}} password={{postgresql_fb_pw}} role_attr_flags=CREATEDB,NOSUPERUSER
+
+- name: create-fb-databases
+  become_user: postgres
+  postgresql_db: name={{ item }} owner={{postgresql_fb_un}} encoding='UTF-8' state=present
+  with_items: "{{postgresql_fb_db_list}}"
+
+- name: grant-all-privileges-to-fb-databases
+  become_user: postgres
+  postgresql_privs: >
+    db={{ item }}
+    privs=ALL
+    type=database
+    role={{postgresql_fb_un}}
+  with_items: "{{postgresql_fb_db_list}}"

@@ -1,0 +1,21 @@
+---
+- name: include-specific-elasticsearch
+  include: elasticsearch-ubuntu.yml
+  tags:
+    - install
+
+- name: include-config
+  include: elasticsearch-config.yml
+  tags:
+    - config
+
+- name: include-specific-plugins
+  include: elasticsearch-plugins.yml
+  tags:
+    - plugins
+
+- name: restart-elasticsearch
+  become: true
+  systemd:
+    name: elasticsearch
+    state: started

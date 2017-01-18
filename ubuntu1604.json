@@ -18,7 +18,14 @@
     {
       "type": "ansible-local",
       "playbook_file": "ansible/main.yml",
-      "galaxy_file": "requirements.yml"
+      "galaxy_file": "requirements.yml",
+      "role_paths": [
+        "ansible/roles/elasticsearch",
+        "ansible/roles/git",
+        "ansible/roles/rbenv",
+        "ansible/roles/postgresql",
+        "ansible/roles/ubuntuos"
+      ]
     }
   ],
   "builders": [

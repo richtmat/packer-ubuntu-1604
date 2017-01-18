@@ -4,26 +4,105 @@
   gather_facts: yes
   
   vars:
-    java_set_javahome: false
-    users:
-      - name: vagrant
-        username: vagrant
-        authorized_keys: []
+    postgresql_fb_un: finderbox
+    postgresql_fb_pw: rT3NdVZeYKGXpN7h
 
+    # Basic settings
+    postgresql_version: 9.4
+    postgresql_encoding: 'UTF-8'
+    postgresql_locale: 'en_US.UTF-8'
+    postgresql_ctype: 'en_US.UTF-8'
+
+    postgresql_admin_user: "postgres"
+    postgresql_default_auth_method: "trust"
+
+    # List of databases to be created (optional)
+    # Note: for more flexibility with extensions use the postgresql_database_extensions setting.
+    postgresql_databases:
+
+      - name: finderbox_development
+        owner: finderbox    # optional; specify the owner of the database
+        encoding: 'UTF-8'   # override global {{ postgresql_encoding }} variable per database
+        lc_collate: 'en_GB.UTF-8'   # override global {{ postgresql_locale }} variable per database
+        lc_ctype: 'en_GB.UTF-8'     # override global {{ postgresql_ctype }} variable per database
+
+      - name: finderbox_integration_local
+        owner: finderbox    # optional; specify the owner of the database
+        encoding: 'UTF-8'   # override global {{ postgresql_encoding }} variable per database
+        lc_collate: 'en_GB.UTF-8'   # override global {{ postgresql_locale }} variable per database
+        lc_ctype: 'en_GB.UTF-8'     # override global {{ postgresql_ctype }} variable per database
+
+      - name: finderbox_test
+        owner: finderbox    # optional; specify the owner of the database
+        encoding: 'UTF-8'   # override global {{ postgresql_encoding }} variable per database
+        lc_collate: 'en_GB.UTF-8'   # override global {{ postgresql_locale }} variable per database
+        lc_ctype: 'en_GB.UTF-8'     # override global {{ postgresql_ctype }} variable per database
+
+    # List of database extensions to be created (optional)
+    # postgresql_database_extensions:
+    #   - db: foobar
+    #     extensions:
+    #       - hstore
+    #       - citext
+
+    # List of users to be created (optional)
+    postgresql_users:
+      - name: finderbox
+        pass: rT3NdVZeYKGXpN7h
+        encrypted: no       # denotes if the password is already encrypted.
+
+    # List of user privileges to be applied (optional)
+    # postgresql_user_privileges:
+    #   - name: baz                   # user name
+    #     db: foobar                  # database
+    #     priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+    #     role_attr_flags: "CREATEDB" # role attribute flags
+
+
+
+
+
+
+    java_set_javahome: false
+      
+      
+      
+      
+      
+    # antigen_zsh_path: "{{ ansible_env.HOME }}/.antigen" 
+    antigen_oh_my_zsh: true 
+    antigen_zsh_aliases: 
+      - { name: "ls", value: "ls -G", user: "all" } 
+      - { name: "ll", value: "ls -lsah", user: "all" } 
+    antigen_zsh_env_vars: 
+      - { name: "PATH", value: "$PATH:/usr/bin:/bin:/usr/sbin:/usr/local/bin", user: "all" } 
+    antigen_zsh_plugins: 
+      - { name: "git", user: "all" } 
+      - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
+      - { name: "npm", user: "all" } 
+      - { name: "common-aliases", user: "all" } 
+      - { name: "ssh-agent", user: "all" } 
+      - { name: "vagrant", user: "all" } 
+      - { name: "tmuxinator", user: "all" } 
+      - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
+    antigen_zsh_themes: 
+      # - { name: "agnoster", user: "vagrant" } 
+      # - { name: "gozilla", user: "vagrant" } 
+      - { name: "arrow", user: "vagrant" } 
+    antigen_zsh_users: 
+      - vagrant
 
   roles:
     - geerlingguy.packer-debian
-    - franklinkim.users-oh-my-zsh
-    - cmprescott.chrome
-    - geerlingguy.nodejs
+    - andres-rojas.antigen_zsh
+    # - cmprescott.chrome
+    # - geerlingguy.nodejs
     - williamyeh.oracle-java
-    # - { role: rvm_io.ruby,
-    #     become: yes,
-    #     rvm1_rubies: ['ruby-2.3.1', 'jruby-9.1.5.0'],
-    #     rvm1_install_path: /usr/local/rvm,
-    #     rvm1_user: root,
-    #     rvm1_bundler_install: yes
-    #   }
+    - ubuntuos
+    # - postgresql
+    # - git
+    # - elasticsearch
+    - rbenv
 
   tasks:
     - apt_repository:
@@ -31,6 +110,8 @@
         update_cache: yes
     - apt: "name={{ item }} state=installed"
       with_items:
+        - apt-transport-https 
+        - ca-certificates
         - wget
         - curl
         - vim
@@ -38,7 +119,42 @@
         - nginx
         - nethogs
         - iftop
+        - unzip
 
+    # for TMUX 2.2
+    - apt: "name={{ item }} state=installed" 
+      with_items:
+        - libevent-dev
+        - libncurses-dev
+        - build-essential
+    - name: Download tmux 2.2.
+      get_url:
+        url: "https://github.com/tmux/tmux/releases/download/2.2/tmux-2.2.tar.gz"
+        dest: "/tmp/tmux-2.2.tar.gz"
+    - name: Expand tmux archive.
+      unarchive:
+        src: "/tmp/tmux-2.2.tar.gz"
+        dest: "/tmp/"
+        copy: no
+    - name: build tmux
+      shell: cd /tmp/tmux-2.2 && ./configure && make && sudo make install
+
+
+    # - name: Download jruby.
+    #   get_url:
+    #     url: "https://s3.amazonaws.com/jruby.org/downloads/9.1.7.0/jruby-bin-9.1.7.0.zip"
+    #     dest: "/tmp/jruby-bin-9.1.7.0.zip"
+    # - name: Creates directory
+    #   file: path=/home/vagrant/jruby/ state=directory
+    # - name: Expand jruby archive.
+    #   unarchive:
+    #     src: "/tmp/jruby-bin-9.1.7.0.zip"
+    #     dest: "/home/vagrant/jruby/"
+    #     copy: no
+    #     become_user: "vagrant"
+    # - name: add-jruby-build-to-path
+    #   become_user: "vagrant"
+    #   lineinfile: dest=~/.zshrc line='export PATH="/home/vagrant/jruby/bin:$PATH"' state=present
 
     # - name: Install NFS server
     #   apt: name="nfs-kernel-server"

@@ -1,0 +1,41 @@
+---
+- name: create-local-deb-repo
+  become_user: vagrant
+  copy: src=repo dest=/home/vagrant
+  register: created_local_deb_repo
+  
+- file: path=/home/vagrant/repo/scanpkg.sh mode=0744
+  become_user: vagrant
+  when: created_local_deb_repo
+
+- name: initialize-local-repo
+  become_user: vagrant
+  when: created_local_deb_repo | success
+  command: ./scanpkg.sh chdir=/home/vagrant/repo
+
+- name: add-local-deb-repo-to-deb-list
+  when: created_local_deb_repo | success
+  apt_repository:
+    repo='deb file:/home/vagrant/repo/ /'
+    state=present
+
+- name: add-foreign-debs
+  become_user: vagrant
+  with_items:
+    - https://github.com/spf13/hugo/releases/download/v0.17/hugo_0.17-64bit.deb
+  get_url:
+    url: "{{ item }}"
+    dest: /home/vagrant/repo/debs
+
+- name: update-local-repo
+  become_user: vagrant
+  command: ./scanpkg.sh chdir=/home/vagrant/repo
+
+- name: update-pkg-list
+  apt:
+    update_cache: yes
+
+- name: install-foreign-debs
+  apt: name="{{ item }}" state=installed allow_unauthenticated=yes
+  with_items:
+    - hugo

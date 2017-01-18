@@ -1,0 +1,49 @@
+---
+- name: set-timezone-to-berlin
+  file: src=/usr/share/zoneinfo/Europe/Berlin dest=/etc/localtime owner=root group=root state=link
+  notify:
+    - update-timezone
+
+- name: set-locale-to-de
+  locale_gen: name=en_US.UTF-8 state=present
+
+- name: add-language
+  lineinfile: dest=/etc/default/locale line='LANGUAGE="en_US.UTF-8"'
+
+- name: add-lc-all
+  lineinfile: dest=/etc/default/locale line='LC_ALL="en_US.UTF-8"'
+
+# - name: install-required-ubuntu-packages
+#   apt:
+#     name: "{{ item }}"
+#     # latest is allowed, because packages with specific version
+#     # like elasticsearch will be marked to its specified version
+#     state: latest
+#     update_cache: yes
+#     install_recommends: yes
+#   with_items:
+#     - curl
+#     - wget
+#     - unzip
+#     - whois
+#     - rsync
+#     - htop
+#     - apt-transport-https
+#     - apt-show-versions
+#     - dpkg-dev
+#     - maven
+    # - xvfb
+    # - x11vnc
+    # - python-virtualenv # Mobile-App scripts4android
+
+# Mobile-App protractor tests
+# - name: install-chromium
+#   apt:
+#     name: "{{item}}"
+#     state: installed    
+#   with_items:
+#     - chromium-browser=53.0.2785*
+
+# - include: create-local-debian-repo.yml
+
+# - include: create-maven-repo.yml

@@ -1,0 +1,93 @@
+---
+# On Ubuntu target: add nginx stable repository from PPA and install its signing key.
+# On Debian target: adding PPA is not available, so it will fail immediately.
+#- name: add-rvm-ubuntu-ppa
+#  apt_repository:
+#    repo: 'ppa:rael-gc/rvm'
+#    state: present
+#    update_cache: true
+
+# TODO: assure elasticsearch is not installed in newer version
+#- name: install-ubuntu-rvm
+#  apt:
+#    name: rvm
+#    update_cache: yes # apt-get update
+#    state: latest
+
+# see: https://gorails.com/setup/ubuntu/16.04
+- name: install-ruby-related-packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+    install_recommends: yes
+  with_items:
+    - g++
+    - gcc
+    - make
+    - libc6-dev
+    - libreadline6-dev
+    - zlib1g-dev
+    - libssl-dev
+    - libyaml-dev
+    - libsqlite3-dev
+    - sqlite3
+    - autoconf
+    - libgmp-dev
+    - libgdbm-dev
+    - libncurses5-dev
+    - automake
+    - libtool
+    - bison
+    - pkg-config
+    - libffi-dev
+
+#- name: add-jenkins-user-to-rvm-group | Adding existing user 'jenkins' to group rvm
+#  user: name=jenkins
+#        groups=rvm
+#        append=yes
+
+# see: https://rvm.io/rvm/install#installation-explained
+#- name: add-jenkins-user-to-rvm-gemsets
+#  become_user: "{{ruby_user}}"
+#  # interactive login shell
+#  shell: /usr/bin/env bash -lc "rvm user gemsets"
+
+- name: install-rvm-key
+  become_user: "{{ruby_user}}"
+  command: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+
+- name: install-rvm
+  become_user: "{{ruby_user}}"
+  shell: curl -sSL https://get.rvm.io | bash -s stable
+
+# rvm install ruby-2.3.1
+# rvm install jruby-9.1.5.0
+# rvm install ruby-2.1.5
+# rvm install ruby-2.2.5
+- name: install-ruby-versions
+  become_user: "{{ruby_user}}"
+  # interactive login shell
+  shell: /usr/bin/env bash -lc "rvm install {{item}}"
+  with_items: "{{ruby_versions}}"
+
+# rvm --default use ruby-2.3.1
+- name: set-default-ruby
+  become_user: "{{ruby_user}}"
+  shell: /usr/bin/env bash -lc "rvm --default use {{ruby_versions[0]}}"
+
+# rvm use ruby-2.3.1 && gem install bundler --no-ri --no-rdoc
+# rvm use jruby-9.1.5.0 && gem install bundler --no-ri --no-rdoc
+# rvm use ruby-2.1.5 && gem install bundler --no-ri --no-rdoc
+# rvm use ruby-2.2.5 && gem install bundler --no-ri --no-rdoc
+- name: install-ruby-bundler
+  become_user: "{{ruby_user}}"
+  shell: /usr/bin/env bash -lc "rvm use {{item}} && gem install bundler --no-ri --no-rdoc"
+  with_items: "{{ruby_versions}}"
+
+- name: check-ruby-installation
+  become_user: "{{ruby_user}}"
+  shell: /usr/bin/env bash -lc "type rvm | head -n 1"
+  register: ruby_install_check
+
+- debug: var=ruby_install_check

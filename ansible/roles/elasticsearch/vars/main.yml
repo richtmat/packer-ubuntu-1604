@@ -1,0 +1,16 @@
+---
+es_version: 1.7.1
+es_home: /usr/share/elasticsearch
+conf_dir: /etc/elasticsearch
+es_user: elasticsearch
+es_group: elasticsearch
+es_plugins_reinstall: true
+es_plugins: [
+    {plugin: "com.yakaz.elasticsearch.plugins/elasticsearch-analysis-combo", version: 1.5.1},
+    {plugin: "elasticsearch/elasticsearch-mapper-attachments", version: 2.7.0}
+]
+es_config: {
+    node.name: "es_node1",
+    script.inline: on,
+    script.indexed: on
+}

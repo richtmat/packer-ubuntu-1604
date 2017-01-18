@@ -1,0 +1,49 @@
+---
+- name: add-elasticsearch-keys
+  become: true
+  apt_key:
+    url=https://packages.elastic.co/GPG-KEY-elasticsearch
+    state=present
+
+- name: add-elasticsearch-apt-sources-list-deb
+  become: true
+  apt_repository:
+    repo: 'deb http://packages.elastic.co/elasticsearch/1.7/debian stable main'
+    state: present
+    update_cache: true
+  register: elasticsearch_source_list_added
+
+# TODO: assure elasticsearch is not installed in newer version
+- name: install-elasticsearch
+  become: true
+  when: elasticsearch_source_list_added | success
+  apt:
+    name: elasticsearch={{es_version}}
+  register: installed_elasticsearch
+
+- name: check-elasticsearch-package-version
+  shell: >
+    dpkg -s elasticsearch | grep Version | egrep -o "[0-9](.*)"
+  register: current_es_version
+
+- debug: var=current_es_version
+
+- debug: msg="Version mismatch"
+  when: current_es_version.stdout != es_version
+  failed_when: current_es_version.stdout != es_version
+
+# this allow to dist-upgrade without elasticsearch version is changing
+# REMEMBER: to update to another ES version you need to
+# apt-mark unhold elasticsearch
+# see: https://help.ubuntu.com/community/PinningHowto
+- name: pin-elasticsearch-to-fixed-version | Pin ES version to {{es_version}}
+  become: true
+  shell: apt-mark hold elasticsearch
+
+#start Elasticsearch on boot up:
+- name: enable-elasticsearch-at-boot
+  become: true
+  systemd:
+    name: elasticsearch
+    enabled: yes
+    daemon_reload: yes

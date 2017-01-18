@@ -1,0 +1,11 @@
+---
+- name: add-git-apt-sources-list-deb
+  become: true
+  apt_repository: repo='ppa:git-core/ppa'  
+  register: git_source_list_added
+
+- name: install-git
+  become: true
+  when: git_source_list_added
+  apt: pkg=git state=latest update_cache=true
+

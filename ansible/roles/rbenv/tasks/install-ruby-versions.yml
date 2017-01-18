@@ -1,0 +1,139 @@
+---
+# see: https://gorails.com/setup/ubuntu/16.04
+
+# sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
+- name: install-ruby-related-packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+    install_recommends: yes
+  with_items:
+    - zlib1g-dev
+    - build-essential
+    - libssl-dev
+    - libreadline-dev
+    - libyaml-dev
+    - libsqlite3-dev
+    - sqlite3
+    - libxml2-dev
+    - libxslt1-dev
+    - libcurl4-openssl-dev
+    - python-software-properties
+    - libffi-dev
+
+- name: check-for-rbenv-directory
+  become_user: "{{ruby_user}}"
+  stat: path=~/.rbenv
+  register: rbenv_check
+
+- debug: var=rbenv_check
+
+# login as jenkins user
+# git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+- name: clone-rbenv-ropo-to-jenkins-HOME
+  become_user: "{{ruby_user}}"
+  shell: $SHELL -lc "cd; git clone https://github.com/rbenv/rbenv.git ~/.rbenv"
+  when: rbenv_check.stat.exists == False
+
+- name: update-rbenv-repo
+  become_user: "{{ruby_user}}"
+  shell: $SHELL -lc "cd ~/.rbenv && git pull"
+
+- name: add-rbenv-initialization-to-profile
+  template: src=rbenv_user.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
+
+# # echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+# - name: add symlink  
+#   become: yes
+#   file:
+#     src: /usr/local/bin/rbenv
+#     dest: $HOME/.rbenv/bin/rbenv
+#     state: link
+
+- name: add-rbenv-bin-to-zsh-path
+  become_user: "{{ruby_user}}"
+  lineinfile: dest=~/.zshrc line='export PATH="$HOME/.rbenv/bin:$PATH"' state=present
+
+- name: add-rbenv-bin-to-bash-path
+  become_user: "{{ruby_user}}"
+  lineinfile: dest=~/.bashrc line='export PATH="$HOME/.rbenv/bin:$PATH"' state=present
+
+# echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+- name: add-rbenv-init-to-bashrc
+  become_user: "{{ruby_user}}"
+  lineinfile: dest=~/.bashrc line='eval "$(rbenv init -)"' state=present
+- name: add-rbenv-init-to-zshrc
+  become_user: "{{ruby_user}}"
+  lineinfile: dest=~/.zshrc line='eval "$(rbenv init -)"' state=present
+
+- name: check-for-ruby-build-directory
+  become_user: "{{ruby_user}}"
+  stat: path=~/.rbenv/plugins/ruby-build/bin
+  register: ruby_build_check
+
+- debug: var=ruby_build_check
+
+# exec $SHELL
+# git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+- name: clone-ruby-build-to-rbenv-plugins
+  become_user: "{{ruby_user}}"
+  shell: $SHELL -lc "git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build"
+  when: ruby_build_check.stat.exists == False
+
+# echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+- name: add-ruby-build-to-zsh-path
+  become_user: "{{ruby_user}}"
+  lineinfile: dest=~/.zshrc line='export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' state=present
+- name: add-ruby-build-to-bash-path
+  become_user: "{{ruby_user}}"
+  lineinfile: dest=~/.bashrc line='export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' state=present
+
+- name: some output
+  become_user: "{{ruby_user}}"
+  shell: cat ~/.zshrc
+
+
+
+# exec $SHELL
+# rbenv install 2.3.1
+- name: install-ruby-versions
+  become_user: "{{ruby_user}}"
+  # interactive login shell
+  # -s: skip install if versino exists
+  shell: source ~/.zshrc && rbenv install --verbose -s {{item}}
+  with_items: "{{ruby_versions}}"
+  args:
+     executable: /bin/zsh
+
+# rbenv global 2.3.1
+# ruby -v
+- name: set-default-ruby
+  become_user: "{{ruby_user}}"
+  shell: source ~/.zshrc && rbenv global {{ruby_versions[0]}}
+  args:
+     executable: /bin/zsh
+
+- name: install-ruby-bundler
+  become_user: "{{ruby_user}}"
+  shell: source ~/.zshrc && rbenv shell {{item}} && gem install bundler --no-ri --no-rdoc
+  with_items: "{{ruby_versions}}"
+  args:
+     executable: /bin/zsh
+
+- name: rehash-rbenv
+  become_user: "{{ruby_user}}"
+  shell: source ~/.zshrc && rbenv rehash
+  args:
+     executable: /bin/zsh
+
+- name: check-ruby-installation
+  become_user: "{{ruby_user}}"
+  shell: source ~/.zshrc && type rbenv | head -n 1
+  register: ruby_install_check
+  args:
+     executable: /bin/zsh
+
+- debug: var=ruby_install_check
+
+
