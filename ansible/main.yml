@@ -86,7 +86,7 @@
       - { name: "tmuxinator", user: "all" } 
       - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
     antigen_zsh_themes: 
-      # - { name: "agnoster", user: "vagrant" } 
+      - { name: "agnoster", user: "vagrant" } 
       # - { name: "gozilla", user: "vagrant" } 
       - { name: "arrow", user: "vagrant" } 
     antigen_zsh_users: 
@@ -95,13 +95,13 @@
   roles:
     - geerlingguy.packer-debian
     - andres-rojas.antigen_zsh
-    # - cmprescott.chrome
-    # - geerlingguy.nodejs
+    - cmprescott.chrome
+    - geerlingguy.nodejs
     - williamyeh.oracle-java
     - ubuntuos
-    # - postgresql
-    # - git
-    # - elasticsearch
+    - postgresql
+    - git
+    - elasticsearch
     - rbenv
 
   tasks:

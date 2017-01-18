@@ -43,7 +43,4 @@
 #start Elasticsearch on boot up:
 - name: enable-elasticsearch-at-boot
   become: true
-  systemd:
-    name: elasticsearch
-    enabled: yes
-    daemon_reload: yes
+  shell: systemctl start elasticsearch
