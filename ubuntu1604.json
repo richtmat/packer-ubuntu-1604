@@ -26,6 +26,10 @@
         "ansible/roles/postgresql",
         "ansible/roles/ubuntuos"
       ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible-after-vagrant/devbox.yml"      
     }
   ],
   "builders": [

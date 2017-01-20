@@ -1,22 +1,15 @@
 ---
 - hosts: localhost
   tasks:
-  # - name: Copy zshrc 
-  #   copy: src=files/zshrc dest=/home/vagrant/.zshrc
-  # - name: Set shell to zsh
-  #   become: yes
-  #   user: name=vagrant shell=/bin/zsh
+  - name: start elasticsearch ffs
+    become: true
+    shell: systemctl start elasticsearch
 
   - name: Make dev directory
     file: path=/home/vagrant/development state=directory
 
   - name: Make modules directory
     file: path=/home/vagrant/development/angular-modules state=directory
-
-  - authorized_key:
-      user: vagrant
-      state: present
-      key: "{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
 
   - name: Checkout finderbox webapp
     git:

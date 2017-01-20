@@ -74,6 +74,16 @@
     antigen_zsh_aliases: 
       - { name: "ls", value: "ls -G", user: "all" } 
       - { name: "ll", value: "ls -lsah", user: "all" } 
+      - { name: "fbw", value: "cd /home/vagrant/development/finderbox/finderbox-web-client", user: all }
+      - { name: "fb", value: "cd /home/vagrant/development/finderbox/finderbox", user: all }
+      - { name: "fbm", value: "cd /home/vagrant/development/finderbox-mobileapp", user: all }
+      - { name: "fbam", value: "cd /home/vagrant/development/angular-modules", user: all }
+      - { name: "fbp", value: "cd /home/vagrant/development/finderbox-provisioning", user: all }
+      - { name: "fbd", value: "cd /home/vagrant/development/finderbox-documentation", user: all }
+      - { name: "fbl", value: "cd /home/vagrant/development/finderbox-landingpage", user: all }
+      - { name: "fbt", value: "cd /home/vagrant/development/angular-modules/finderbox-translations", user: all }
+      - { name: "fba", value: "cd /home/vagrant/development/angular-modules/finderbox-api", user: all }
+      - { name: "dev", value: "cd /home/vagrant/development/", user: all }
     antigen_zsh_env_vars: 
       - { name: "PATH", value: "$PATH:/usr/bin:/bin:/usr/sbin:/usr/local/bin", user: "all" } 
     antigen_zsh_plugins: 
@@ -86,9 +96,9 @@
       - { name: "tmuxinator", user: "all" } 
       - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
     antigen_zsh_themes: 
-      - { name: "agnoster", user: "vagrant" } 
-      # - { name: "gozilla", user: "vagrant" } 
-      - { name: "arrow", user: "vagrant" } 
+      # - { name: "agnoster", user: "vagrant" } 
+      - { name: "gozilla", user: "vagrant" } 
+      # - { name: "arrow", user: "vagrant" } 
     antigen_zsh_users: 
       - vagrant
 
@@ -140,21 +150,6 @@
       shell: cd /tmp/tmux-2.2 && ./configure && make && sudo make install
 
 
-    # - name: Download jruby.
-    #   get_url:
-    #     url: "https://s3.amazonaws.com/jruby.org/downloads/9.1.7.0/jruby-bin-9.1.7.0.zip"
-    #     dest: "/tmp/jruby-bin-9.1.7.0.zip"
-    # - name: Creates directory
-    #   file: path=/home/vagrant/jruby/ state=directory
-    # - name: Expand jruby archive.
-    #   unarchive:
-    #     src: "/tmp/jruby-bin-9.1.7.0.zip"
-    #     dest: "/home/vagrant/jruby/"
-    #     copy: no
-    #     become_user: "vagrant"
-    # - name: add-jruby-build-to-path
-    #   become_user: "vagrant"
-    #   lineinfile: dest=~/.zshrc line='export PATH="/home/vagrant/jruby/bin:$PATH"' state=present
 
     # - name: Install NFS server
     #   apt: name="nfs-kernel-server"

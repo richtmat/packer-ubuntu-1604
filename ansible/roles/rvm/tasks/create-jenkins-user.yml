@@ -1,8 +1,0 @@
----
-- name: create-jenkins-user-for-rvm
-  user:
-    name: "{{ruby_user}}"
-    shell: /bin/bash
-    password: "{{ ruby_user | password_hash('sha512') }}"
-    createhome: yes
-    home: "{{ jenkins_home }}"
