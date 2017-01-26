@@ -1,0 +1,41 @@
+# ~/.tmuxinator/finderbox.yml
+
+name: finderbox
+root: /home/vagrant/development/f
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+startup_window: server
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+# Runs after everything. Use it to attach to tmux with custom options etc.
+# post: tmux -CC attach -t finderbox
+
+#layout: a8af,208x55,0,0[208x23,0,0{104x23,0,0,0,103x23,105,0,5},208x31,0,24,2]
+
+windows:
+  - server:
+      layout: b3d0,186x53,0,0[186x38,0,0,0,186x14,0,39,1]
+      panes:
+        - atom:
+          - cd finderbox-web-client
+          - npm run dev
+        - backend:
+          - cd finderbox
+          - rails s
