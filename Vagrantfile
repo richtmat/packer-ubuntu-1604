@@ -9,15 +9,19 @@ ENV["LC_ALL"] = "en_US.UTF-8"
 Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
   config.ssh.forward_agent = true
+  
   config.vm.synced_folder '.', '/vagrant', type: 'nfs'
+  config.vm.synced_folder '/home/matthias/development/repos/', '/home/vagrant/development/'
+  
   config.vm.define "virtualbox" do |virtualbox|
     virtualbox.vm.hostname = "virtualbox-ubuntu1604"
     virtualbox.vm.box = "file://builds/virtualbox-ubuntu1604.box"
     virtualbox.vm.network :private_network, ip: "172.16.3.2"
+    config.vm.network "forwarded_port", guest: 8000, host: 8000
 
     config.vm.provider :virtualbox do |v|
       v.gui = false
-      v.memory = 2048
+      v.memory = 4096
       v.cpus = 2
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--ioapic", "on"]
