@@ -1,8 +1,5 @@
 - williamyeh.oracle-java
-# - src: git+https://richtmat@bitbucket.org/finderbox/fb-jenkins-ci.git
 - geerlingguy.packer-debian
 - andres-rojas.antigen_zsh
 - cmprescott.chrome
 - geerlingguy.nodejs
-
-# - rvm_io.ruby
