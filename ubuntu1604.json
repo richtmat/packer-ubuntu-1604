@@ -5,15 +5,20 @@
       "source": "files/motd", 
       "destination": "/tmp/motd" 
     }, 
+    { 
+      "type": "file", 
+      "source": "files/.tmux.conf", 
+      "destination": "/home/vagrant/.tmux.conf" 
+    }, 
+    { 
+      "type": "file", 
+      "source": "files/.tmuxinator", 
+      "destination": "/home/vagrant/.tmuxinator" 
+    }, 
     {
       "type": "shell",
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/ansible.sh"
-    },
-    {
-      "type": "shell",
-      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
+      "scripts": ["scripts/ansible.sh", "scripts/setup.sh"]
     },
     {
       "type": "ansible-local",
@@ -27,9 +32,39 @@
         "ansible/roles/ubuntuos"
       ]
     },
+    { 
+      "type": "file", 
+      "source": "/etc/nginx/nginx.conf", 
+      "destination": "/tmp/nginx.conf" 
+    },
     {
-      "type": "ansible-local",
-      "playbook_file": "ansible-after-vagrant/devbox.yml"      
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "inline": ["cp /tmp/nginx.conf /etc/nginx/nginx.conf"]
+    },
+    { 
+      "type": "file", 
+      "source": "/home/matthias/.ssh/id_rsa", 
+      "destination": "/home/vagrant/.ssh/id_rsa" 
+    },
+    { 
+      "type": "file", 
+      "source": "/home/matthias/.ssh/id_rsa.pub", 
+      "destination": "/home/vagrant/.ssh/id_rsa.pub" 
+    },
+    { 
+      "type": "file", 
+      "source": "/home/matthias/.ssh/master@identpro.id_rsa", 
+      "destination": "/home/vagrant/.ssh/master@identpro.id_rsa" 
+    },
+    { 
+      "type": "file", 
+      "source": "/home/matthias/.ssh/master@identpro.id_rsa.pub", 
+      "destination": "/home/vagrant/.ssh/master@identpro.id_rsa.pub" 
+    },
+    {
+      "type": "shell",
+      "scripts": ["scripts/dev_env.sh"]
     }
   ],
   "builders": [
