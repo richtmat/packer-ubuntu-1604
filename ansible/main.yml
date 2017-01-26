@@ -73,9 +73,10 @@
     antigen_oh_my_zsh: true 
     antigen_zsh_aliases: 
       - { name: "ls", value: "ls -G", user: "all" } 
-      - { name: "ll", value: "ls -lsah", user: "all" } 
+      - { name: "ll", value: "ls -lah", user: "all" } 
       - { name: "fbw", value: "cd /home/vagrant/development/finderbox/finderbox-web-client", user: all }
       - { name: "fb", value: "cd /home/vagrant/development/finderbox/finderbox", user: all }
+      - { name: "fbf", value: "cd /home/vagrant/development/finderbox/finderbox", user: all }
       - { name: "fbm", value: "cd /home/vagrant/development/finderbox-mobileapp", user: all }
       - { name: "fbam", value: "cd /home/vagrant/development/angular-modules", user: all }
       - { name: "fbp", value: "cd /home/vagrant/development/finderbox-provisioning", user: all }
@@ -86,9 +87,9 @@
       - { name: "dev", value: "cd /home/vagrant/development/", user: all }
     antigen_zsh_env_vars: 
       - { name: "PATH", value: "$PATH:/usr/bin:/bin:/usr/sbin:/usr/local/bin", user: "all" } 
+      - { name: "EDITOR", value: "vim", user: "all" } 
     antigen_zsh_plugins: 
       - { name: "git", user: "all" } 
-      - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
       - { name: "npm", user: "all" } 
       - { name: "common-aliases", user: "all" } 
       - { name: "ssh-agent", user: "all" } 
@@ -96,9 +97,7 @@
       - { name: "tmuxinator", user: "all" } 
       - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
     antigen_zsh_themes: 
-      # - { name: "agnoster", user: "vagrant" } 
-      - { name: "gozilla", user: "vagrant" } 
-      # - { name: "arrow", user: "vagrant" } 
+      - { name: "agnoster", user: "vagrant" }
     antigen_zsh_users: 
       - vagrant
 
