@@ -96,8 +96,10 @@
       - { name: "vagrant", user: "all" } 
       - { name: "tmuxinator", user: "all" } 
       - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
+      - { name: "mafredri/zsh-async", user: "all }"
+      - { name: "sindresorhus/pure", user: "all }"
     antigen_zsh_themes: 
-      - { name: "agnoster", user: "vagrant" }
+      - { name: "pure", user: "vagrant" }
     antigen_zsh_users: 
       - vagrant
 

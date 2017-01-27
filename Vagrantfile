@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.provider :virtualbox do |v|
       v.gui = false
-      v.memory = 4096
+      v.memory = 3072
       v.cpus = 2
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--ioapic", "on"]
