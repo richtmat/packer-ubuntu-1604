@@ -1,7 +1,7 @@
 # ~/.tmuxinator/finderbox.yml
 
 name: finderbox
-root: /home/vagrant/development/f
+root: /home/vagrant/development/finderbox
 
 # Optional tmux socket
 # socket_name: foo

@@ -1,7 +1,7 @@
 # ~/.tmuxinator/integration.yml
 
 name: integration
-root: /home/vagrant/development/f
+root: /home/vagrant/development/finderbox
 
 # Optional tmux socket
 # socket_name: foo
@@ -37,7 +37,7 @@ windows:
           - echo "" > ../finderbox/log/integration_local.log
           - less -R +F ../finderbox/log/integration_local.log
   - workspace:
-      root: /home/vagrant/development/f/finderbox-web-client
+      root: /home/vagrant/development/finderbox/finderbox-web-client
       panes:
         - testlocal:
           - echo grunt test-local:all
