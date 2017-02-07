@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
   
   config.vm.synced_folder '.', '/vagrant', type: 'nfs'
-  config.vm.synced_folder '/home/matthias/development/repos/', '/home/vagrant/development/'
+  config.vm.synced_folder '/home/matthias/development/repos', '/home/vagrant/development'
   
   config.vm.define "virtualbox" do |virtualbox|
     virtualbox.vm.hostname = "virtualbox-ubuntu1604"
@@ -31,8 +31,6 @@ Vagrant.configure("2") do |config|
       s.privileged = false
       s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
     end
-    
-    config.vm.provision "file", source: "files/motd", destination: "~/.motd"
   end
 
 end
