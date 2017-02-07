@@ -88,6 +88,8 @@
     antigen_zsh_env_vars: 
       - { name: "PATH", value: "$PATH:/usr/bin:/bin:/usr/sbin:/usr/local/bin", user: "all" } 
       - { name: "EDITOR", value: "vim", user: "all" } 
+      - { name: "NPM_PACKAGES", value: "${HOME}/.npm-packages", user: "all" } 
+      - { name: "PATH", value: "$NPM_PACKAGES/bin:$PATH", user: "all" } 
     antigen_zsh_plugins: 
       - { name: "git", user: "all" } 
       - { name: "npm", user: "all" } 
@@ -96,8 +98,8 @@
       - { name: "vagrant", user: "all" } 
       - { name: "tmuxinator", user: "all" } 
       - { name: "zsh-users/zsh-syntax-highlighting", user: "all" } 
-      - { name: "mafredri/zsh-async", user: "all }"
-      - { name: "sindresorhus/pure", user: "all }"
+      - { name: "mafredri/zsh-async", user: "all" }
+      - { name: "sindresorhus/pure", user: "all" }
     antigen_zsh_themes: 
       - { name: "pure", user: "vagrant" }
     antigen_zsh_users: 
