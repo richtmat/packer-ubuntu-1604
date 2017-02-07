@@ -15,3 +15,17 @@
 |    """""" |
 '-.__   __.-'
      """ 
+
+
+
+
+Don't forget to:
+
+sudo systemctl start elasticsearch
+gem install tmuxinator     
+npm install -g npm-check
+npm install -g grunt-cli
+cd /home/vagrant/development/finderbox/finderbox
+bundle install
+echo rake db:insert-test-data
+tmuxinator start finderbox
